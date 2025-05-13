@@ -38,7 +38,7 @@ const App = () => {
               <nav className="navbar">
                 <div className="navbar-container">
                   <div className="logo">
-                    <h1>BOOKMATE</h1>
+                    <h1>BOOKSTORE</h1>
                   </div>
                   <div className="auth-buttons">
                     <button className="login-btn" onClick={handleLoginClick}>Login</button>
