@@ -4,7 +4,7 @@ pipeline {
     environment {
         VERSION = "${BUILD_NUMBER}"
         FRONTEND_IMAGE = "sumithaapvr/demo-app"
-        BACKEND_IMAGE = "sumithaapvr/backend-app"
+        //BACKEND_IMAGE = "sumithaapvr/backend-app"
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
     }
 
@@ -22,8 +22,8 @@ pipeline {
                     echo "🔨 Building frontend image: ${FRONTEND_IMAGE}:${VERSION}"
                     docker.build("${FRONTEND_IMAGE}:${VERSION}", '--no-cache ./demo')
 
-                    echo "🔨 Building backend image: ${BACKEND_IMAGE}:${VERSION}"
-                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend')
+                    //echo "🔨 Building backend image: ${BACKEND_IMAGE}:${VERSION}"
+                    //docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend')
                 }
             }
         }
@@ -35,13 +35,13 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
                         // Push versioned images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").push()
-                        docker.image("${BACKEND_IMAGE}:${VERSION}").push()
+                        //docker.image("${BACKEND_IMAGE}:${VERSION}").push()
 
                         // Tag and push latest images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").tag('latest')
-                        docker.image("${BACKEND_IMAGE}:${VERSION}").tag('latest')
+                        //docker.image("${BACKEND_IMAGE}:${VERSION}").tag('latest')
                         docker.image("${FRONTEND_IMAGE}:latest").push()
-                        docker.image("${BACKEND_IMAGE}:latest").push()
+                        //docker.image("${BACKEND_IMAGE}:latest").push()
                     }
                 }
             }
