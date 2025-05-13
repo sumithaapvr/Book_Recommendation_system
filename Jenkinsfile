@@ -5,7 +5,7 @@ pipeline {
         VERSION = "${BUILD_NUMBER}"
         FRONTEND_IMAGE = "sumithaapvr/demo-app"
         BACKEND_IMAGE = "sumithaapvr/backend-app"
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKER_CREDENTIALS_ID = 'docker_cred'
     }
 
     stages {
