@@ -5,14 +5,14 @@ pipeline {
         VERSION = "${BUILD_NUMBER}"
         FRONTEND_IMAGE = "sumithaapvr/demo-app"
         BACKEND_IMAGE = "sumithaapvr/backend-app"
-        DOCKER_CREDENTIALS_ID = 'docker_cred'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 echo "📥 Cloning repository..."
-                git branch: 'main', credentialsId: 'github_cred', url: 'https://github.com/sumithaapvr/Book_Recommendation_system.git'
+                git branch: 'main', url: 'https://github.com/sumithaapvr/Book_Recommendation_system.git'
             }
         }
 
