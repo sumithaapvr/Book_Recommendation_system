@@ -9,7 +9,7 @@ const Home = () => {
       <nav className="navbar">
         <div className="navbar-container">
           <div className="logo">
-            <h1>BookFinder</h1>
+            <h1>BookStore</h1>
           </div>
           <div className="auth-buttons">
             <a href="/login" className="login-btn">Login</a>
