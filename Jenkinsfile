@@ -23,7 +23,7 @@ pipeline {
                     docker.build("${FRONTEND_IMAGE}:${VERSION}", '--no-cache ./demo')
 
                     echo "🔨 Building backend image: ${BACKEND_IMAGE}:${VERSION}"
-                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache ./backend')
+                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend')
                 }
             }
         }
