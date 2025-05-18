@@ -169,7 +169,7 @@ const App = () => {
                   <p>
                     BookMate brings you personalized book recommendations based on your academic courses.<br />
                     Whether you're searching for textbooks, references, or exploring new reads, <br />
-                    we’ve got you covered with curated suggestions tailored just for you.
+                    we’ve got you covered with curated suggestions tailored just for you!..
                   </p>
                   <div className="blinking-text">Unlock knowledge and explore a world of books — your next essential read is just a search away!</div>
                 </div>
