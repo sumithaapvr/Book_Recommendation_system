@@ -135,7 +135,7 @@ const BookRecommendation = () => {
     setError(null); // Reset error before new search
 
     try {
-      const response = await fetch('http://localhost:5000/api/books/search', {
+      const response = await fetch('http://backend:5000/api/books/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
