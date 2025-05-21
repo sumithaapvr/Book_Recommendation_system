@@ -16,6 +16,6 @@ services:
     image: sumithaapvr/backend-app:${VERSION:-latest}
     ports:
       - "5000:5000"
-    environment:
-      - MONGO_URL=mongodb://192.168.49.1:27017/book_recommendation
+    env_file:
+      - ./backend/.env
     restart: unless-stopped
