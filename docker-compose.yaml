@@ -3,13 +3,19 @@ services:
   frontend:
     build:
       context: ./demo
-    image: sumithaapvr/demo-app
+    image: sumithaapvr/demo-app:${VERSION:-latest}
     ports:
       - "4812:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
 
   backend:
     build:
       context: ./backend
-    image: sumithaapvr/backend-app
+    image: sumithaapvr/backend-app:${VERSION:-latest}
     ports:
       - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://192.168.49.1:27017/book_recommendation
+    restart: unless-stopped
