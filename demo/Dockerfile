@@ -3,17 +3,18 @@ FROM node:slim AS build
 
 WORKDIR /app
 
-# Copy env first (important for React build-time variables)
-COPY .env .env
+# Accept environment variable at build time
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy rest of the app
+# Copy the rest of the application
 COPY . .
 
-# Build React app (will use REACT_APP_API_URL from .env)
+# Build React app
 RUN npm run build
 
 # Stage 2: Serve React Application using Nginx
