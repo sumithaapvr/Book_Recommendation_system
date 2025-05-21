@@ -10,7 +10,7 @@ const Signup = ({ onClose }) => {
     e.preventDefault();
   
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch('http://backend:5000/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
