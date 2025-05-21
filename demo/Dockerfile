@@ -1,29 +1,26 @@
 # Stage 1: Build React Application
 FROM node:slim AS build
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Copy env first (important for React build-time variables)
+COPY .env .env
 
-# Install dependencies
+# Copy package files and install dependencies
+COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy rest of the app
 COPY . .
 
-# Build the React application
+# Build React app (will use REACT_APP_API_URL from .env)
 RUN npm run build
 
 # Stage 2: Serve React Application using Nginx
 FROM nginx:alpine
 
-# Copy the built React application to the Nginx server directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 80 to the outside world
 EXPOSE 80
 
-# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
