@@ -23,7 +23,7 @@ pipeline {
                     docker.build("${FRONTEND_IMAGE}:${VERSION}", '--no-cache ./demo')
 
                     echo "🔨 Building backend image: ${BACKEND_IMAGE}:${VERSION}"
-                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend')
+                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend")
                 }
             }
         }
@@ -33,16 +33,38 @@ pipeline {
                 script {
                     echo "📦 Pushing images to Docker Hub..."
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        // Push versioned images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").push()
                         docker.image("${BACKEND_IMAGE}:${VERSION}").push()
 
-                        // Tag and push latest images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").tag('latest')
                         docker.image("${BACKEND_IMAGE}:${VERSION}").tag('latest')
                         docker.image("${FRONTEND_IMAGE}:latest").push()
                         docker.image("${BACKEND_IMAGE}:latest").push()
                     }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    echo "🚀 Deploying frontend and backend containers..."
+
+                    // Stop and remove old containers if they exist
+                    sh '''
+                    docker rm -f frontend-container || true
+                    docker rm -f backend-container || true
+                    '''
+
+                    // Run backend container
+                    sh """
+                    docker run -d --name backend-container -p 5000:5000 ${BACKEND_IMAGE}:${VERSION}
+                    """
+
+                    // Run frontend container
+                    sh """
+                    docker run -d --name frontend-container -p 4812:80 ${FRONTEND_IMAGE}:${VERSION}
+                    """
                 }
             }
         }
@@ -57,10 +79,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and push successful! Images tagged with version: ${VERSION}"
+            echo "✅ Build, push, and deployment successful! Images tagged with version: ${VERSION}"
         }
         failure {
-            echo "❌ Build or push failed. Check logs above for details."
+            echo "❌ Something went wrong. Check the logs above for errors."
         }
     }
 }
