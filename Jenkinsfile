@@ -16,34 +16,29 @@ pipeline {
             }
         }
 
-        stage('Build Frontend & Backend Images') {
+        stage('Build & Push Docker Images') {
             steps {
                 script {
-                    echo "🔨 Building frontend image: ${FRONTEND_IMAGE}:${VERSION}"
-                    docker.build("${FRONTEND_IMAGE}:${VERSION}", '--no-cache ./demo')
-
-                    echo "🔨 Building backend image: ${BACKEND_IMAGE}:${VERSION}"
-                    docker.build("${BACKEND_IMAGE}:${VERSION}", '--no-cache --progress=plain ./backend')
-                }
-            }
-        }
-
-        stage('Push Images to Docker Hub') {
-            steps {
-                script {
-                    echo "📦 Pushing images to Docker Hub..."
+                    docker.build("${FRONTEND_IMAGE}:${VERSION}", './demo')
+                    docker.build("${BACKEND_IMAGE}:${VERSION}", './backend')
+                    
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        // Push versioned images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").push()
                         docker.image("${BACKEND_IMAGE}:${VERSION}").push()
-
-                        // Tag and push latest images
                         docker.image("${FRONTEND_IMAGE}:${VERSION}").tag('latest')
                         docker.image("${BACKEND_IMAGE}:${VERSION}").tag('latest')
                         docker.image("${FRONTEND_IMAGE}:latest").push()
                         docker.image("${BACKEND_IMAGE}:latest").push()
                     }
                 }
+            }
+        }
+
+        stage('Deploy App') {
+            steps {
+                echo "🚀 Deploying app with docker-compose..."
+                sh 'docker-compose down || true'
+                sh 'docker-compose up -d --build'
             }
         }
 
@@ -57,10 +52,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and push successful! Images tagged with version: ${VERSION}"
+            echo "✅ Build and deploy successful!"
         }
         failure {
-            echo "❌ Build or push failed. Check logs above for details."
+            echo "❌ Build or deploy failed."
         }
     }
 }
