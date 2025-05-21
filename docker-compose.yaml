@@ -7,6 +7,10 @@ services:
     ports:
       - "5000:5000"
     container_name: backend
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/book_recommendation  # 
 
   frontend:
     build:
@@ -18,3 +22,9 @@ services:
       - "3000:80"
     depends_on:
       - backend
+
+  mongodb:  
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
