@@ -5,7 +5,7 @@ services:
       context: ./demo
     image: sumithaapvr/demo-app
     ports:
-      - "3000:80"
+      - "4812:80"
 
   backend:
     build:
